@@ -6,4 +6,4 @@ st.set_page_config(
 )
 
 st.title("📢 Control de Boletines")
-st.info("Aplicación en construcción")
+st.write("Proyecto creado correctamente.")
