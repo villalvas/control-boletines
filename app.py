@@ -25,7 +25,7 @@ st.markdown("---")
 # =============================================================================
 # Reemplaza únicamente esta URL por el enlace real de tu Google Sheets.
 # La hoja debe permitir lectura mediante enlace.
-URL_DRIVE = "PEGA_AQUI_EL_ENLACE_DE_TU_GOOGLE_SHEETS"
+URL_DRIVE = "https://docs.google.com/spreadsheets/d/1aGFtjIeJQ0ZyNCoTvJzfHtM3gQ6JdWKgiVHP5i-Pjj8/edit?usp=sharing"
 
 # Nombre exacto de la única pestaña consolidada.
 NOMBRE_PESTANA = "Control de boletines"
