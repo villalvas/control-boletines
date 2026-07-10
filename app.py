@@ -1,11 +1,9 @@
 import io
 from urllib.parse import quote
-
 import pandas as pd
 import plotly.express as px
 import requests
 import streamlit as st
-
 
 # =============================================================================
 # CONFIGURACIÓN GENERAL
@@ -202,18 +200,21 @@ if df_raw.empty:
 
 
 # =============================================================================
-# LÓGICA DE AUDITORÍA DE TIEMPOS (SLA)
+# LÓGICA DE AUDITORÍA DE TIEMPOS (SLA) — OPTIMIZADA PARA FORMATOS MIXTOS
 # =============================================================================
+# Se agrega format="mixed" y limpieza de strings para evitar fallas de lectura en meses específicos como Junio
 fechas_entrega = pd.to_datetime(
-    df_raw[COL_ENTREGA],
+    df_raw[COL_ENTREGA].astype(str).str.strip(),
     errors="coerce",
     dayfirst=True,
+    format="mixed"
 )
 
 fechas_odoo = pd.to_datetime(
-    df_raw[COL_ODOO],
+    df_raw[COL_ODOO].astype(str).str.strip(),
     errors="coerce",
     dayfirst=True,
+    format="mixed"
 )
 
 
@@ -455,7 +456,7 @@ with col_tabla:
         estructura_columnas = {
             "GRUPO": df_filtrado[COL_GRUPO].fillna("---"),
             "ÁREA COMERCIAL": df_filtrado[COL_AREA].fillna("---"),
-            "CLIENTE / INSTITUCIÓN": df_filtrado[COL_CLIENTE].fillna("---"),
+            "CLIENTE / INSTITUCIÓN": df_filtrado[COL_GRID_CLIENTE] if 'COL_GRID_CLIENTE' in locals() else df_filtrado[COL_CLIENTE].fillna("---"),
             "EJECUTIVO / COORDINADOR": df_filtrado[COL_EJECUTIVO].fillna("---"),
             "F. ENTREGA": df_filtrado[COL_ENTREGA].fillna("---"),
             "F. ODOO": df_filtrado[COL_ODOO].fillna("---"),
@@ -486,6 +487,7 @@ with col_tabla:
             df_tabla_final["F. ENTREGA"],
             errors="coerce",
             dayfirst=True,
+            format="mixed"
         )
 
         df_tabla_final["_orden_fecha"] = fechas_ordenamiento
@@ -501,6 +503,7 @@ with col_tabla:
                 df_tabla_final[columna_fecha],
                 errors="coerce",
                 dayfirst=True,
+                format="mixed"
             )
 
             df_tabla_final[columna_fecha] = fechas_formateadas.dt.strftime(
@@ -530,4 +533,3 @@ with col_tabla:
             hide_index=True,
             height=360,
         )
-
