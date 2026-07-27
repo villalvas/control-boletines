@@ -17,6 +17,44 @@ st.set_page_config(
 st.title("📊 Control de Boletines")
 st.markdown("---")
 
+# =============================================================================
+# CONTROL DE ACCESO (LOGIN)
+# =============================================================================
+def check_password():
+    """Retorna True si el usuario ingresa la contraseña correcta."""
+    def password_entered():
+        if st.session_state["password"] == "Boletines2026*":  # <-- Cambia tu contraseña aquí
+            st.session_state["password_correct"] = True
+            del st.session_state["password"]  # No guardamos la clave en memoria
+        else:
+            st.session_state["password_correct"] = False
+
+    if "password_correct" not in st.session_state:
+        # Muestra la caja de texto para ingresar la clave
+        st.text_input(
+            "🔒 Ingresa la contraseña para acceder al tablero:",
+            type="password",
+            on_change=password_entered,
+            key="password"
+        )
+        return False
+    elif not st.session_state["password_correct"]:
+        # Clave incorrecta
+        st.text_input(
+            "🔒 Ingresa la contraseña para acceder al tablero:",
+            type="password",
+            on_change=password_entered,
+            key="password"
+        )
+        st.error("❌ Contraseña incorrecta.")
+        return False
+    else:
+        # Clave correcta
+        return True
+
+# Si el usuario no se ha autenticado, detiene la ejecución del dashboard
+if not check_password():
+    st.stop()
 
 # =============================================================================
 # CONEXIÓN A GOOGLE SHEETS
